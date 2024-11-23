@@ -3,6 +3,7 @@
 #include <iostream>
 using namespace std;
 
+// O(N)
 void HashTable::HDestroyTable(NodeHash* node) {
     while (node != nullptr) {
         NodeHash* temp = node;
@@ -11,6 +12,7 @@ void HashTable::HDestroyTable(NodeHash* node) {
     }
 }
 
+// O(N)
 HashTable::HashTable(int initialSize) {
     size = initialSize;  
     count = 0;  
@@ -20,15 +22,17 @@ HashTable::HashTable(int initialSize) {
     }
 }
 
-int HashTable::HashFunc( string& str) {
+// O(N)
+int HashTable::HashFunc(string& str) {
     int hash = 0;  
     for (char c : str) {
-        hash += c;  //ASCII
+        hash += c;  // ASCII
     }
     return hash % size;
 }
 
-void HashTable::HPUSH( string& key, string& value) {
+// O(1) - O(N)
+void HashTable::HPUSH(string& key, string& value) {
     int index = HashFunc(key); 
     NodeHash* current = table[index]; 
 
@@ -40,14 +44,15 @@ void HashTable::HPUSH( string& key, string& value) {
         current = current->next; 
     }
 
-    NodeHash* newNode = new  NodeHash(key, value);  // создание нового узла
+    NodeHash* newNode = new NodeHash(key, value);  // создание нового узла
     newNode->next = table[index];  // новый узел указывает на текущий узел по индексу
     table[index] = newNode;  // новый узел становится текущим узлом по индексу
     count++;  
 
 }
 
-void HashTable::HDEL( string& key) {
+// O(1) - O(N)
+void HashTable::HDEL(string& key) {
     int index = HashFunc(key); 
     NodeHash* current = table[index];  
     NodeHash* prev = nullptr; 
@@ -69,26 +74,28 @@ void HashTable::HDEL( string& key) {
     }
 }
 
+// O(1) - O(N)
 string HashTable::HGET(string& key) {
     int index = HashFunc(key);  
     NodeHash* current = table[index]; 
 
     while (current != nullptr) {  
-        if (current->key == key) {  // если ключ найден
+        if (current->key == key) { 
             return current->value;  
         }
         current = current->next; 
     }
 
-    return "\n\nThe key was not found\n\n";  
+    return "\n\nКлюч не был найден!\n\n";  
 }
 
+// O(N)
 void HashTable::HREAD() {
     for (int i = 0; i < size; i++) {  
         cout << "[" << i << "]: ";
         NodeHash* current = table[i]; 
         if (current == nullptr) {
-            cout << "empty" << endl;  
+            cout << "пусто" << endl;  
             continue;  
         }
         while (current != nullptr) {

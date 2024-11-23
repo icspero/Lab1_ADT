@@ -128,9 +128,9 @@ struct HashTable {
     
     HashTable(int initialSize = 100);
     int HashFunc(string& str);
-    void HPUSH( string& key, string& value);
-    string HGET( string& key);
-    void HDEL( string& key);
+    void HPUSH(string& key, string& value);
+    string HGET(string& key);
+    void HDEL(string& key);
     void HREAD();
 
     void HDestroyTable(NodeHash* node);
@@ -138,7 +138,37 @@ struct HashTable {
 };
 HashTable::~HashTable() {
     for (int i = 0; i < size; i++) {
-         HDestroyTable(table[i]);
+        HDestroyTable(table[i]);
     }
     delete[] table;
+}
+
+// Full Binary Tree
+struct FBTNode {
+    string key;
+    FBTNode* left;
+    FBTNode* right;
+
+    FBTNode(string key) : key(key), left(nullptr), right(nullptr) {}
+};
+struct FullBinaryTree {
+    FBTNode* root;
+
+    FullBinaryTree() : root(nullptr) {}
+
+    void Insert(string key);
+    void InsertHelper(FBTNode* node, string& key);
+    int CountNodes(FBTNode* node);
+    bool IsFullBinaryTree();
+    bool IsFullBinaryTreeHelper(FBTNode* node);
+    FBTNode* Search(string key);
+    FBTNode* SearchHelper(FBTNode* node, const string& key);
+    void TREAD();
+    void TREAD_HELPER(FBTNode* node);
+
+    void DestroyTree(FBTNode* node);
+    ~FullBinaryTree();
+};
+FullBinaryTree::~FullBinaryTree() {
+    DestroyTree(root);
 }
