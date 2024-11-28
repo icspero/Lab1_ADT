@@ -123,20 +123,16 @@ void SinglyLinkedList::LONE_search(string& value) {
         return;
     }
     int index = 0;
-    if (head->cell == value) {
-        cout << "\nЭлемент найден! Индекс: " << index << endl;
-        return;
-    }
-    while (node != nullptr && node->cell != value) {
+    while (node != nullptr) {
+        if (node->cell == value) {
+            cout << "\nЗначение найдено! Индекс: " << index << endl;
+            return;
+        }
         node = node->next;
         index++;
     }
-    if (node == nullptr) {
-        cout << "\nЗначение не найдено!" << endl;
-        return;
-    }
-    cout << "\nЭлемент найден! Индекс: " << index << endl;
     
+    cout << "\nЗначение не найдено!" << endl;
 }
 
 // O(N)
@@ -152,4 +148,8 @@ void SinglyLinkedList::LONE_read() {
         node = node->next;
     }
     cout << endl;
+}
+
+SinglyLinkedList::~SinglyLinkedList() {
+    Clear();
 }

@@ -50,17 +50,6 @@ void Stack::SREAD() {
     cout << endl;
 }
 
-// O(1)
-void Stack::WriteFromFile(string& cell) {
-    SingleNode* node = new SingleNode;
-    node->cell = cell;
-    if (head == nullptr) {
-        head = node;
-        tail = node;
-    }
-    else {
-        tail->next = node;
-        tail = node;
-    }
+Stack::~Stack() {
+    Clear();
 }
-

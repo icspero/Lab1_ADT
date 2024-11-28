@@ -5,7 +5,7 @@ using namespace std;
 
 // O(1)
 void Array::MPUSH_end(string& value) {
-    data[size++] = value + " ";
+    data[size++] = value;
 }
 
 // O(N)
@@ -17,7 +17,7 @@ void Array::MPUSH_index(const int& index, string& value) {
     for (int i = size; i > index; i--) { 
         data[i] = data[i - 1];
     }
-    data[index] = value + " ";
+    data[index] = value;
     size++; 
 }
 
@@ -48,7 +48,7 @@ void Array::MREP(const int& index, string& value) {
         cout << endl << "Неверный ввод!" << endl; //
         return;
     }
-    data[index] = " " + value + " "; 
+    data[index] = value; 
 }
 
 // O(1)
@@ -60,7 +60,14 @@ int Array::MSIZE() {
 void Array::MREAD() {
     cout << endl;
     for (int i = 0; i < size; i++) {  
-        cout << data[i];
+        cout << data[i] << " ";
     }
     cout << endl;
+}
+
+Array::Array() : size(0), capacity(100) {
+    data = new string[capacity];
+}
+Array::~Array() {
+    delete[] data;  
 }

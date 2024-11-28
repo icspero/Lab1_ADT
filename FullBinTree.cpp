@@ -1,12 +1,11 @@
 #include "structures.h"
 
 #include <iostream>
+#include <fstream>
 using namespace std;
 
-
-
-// Очистка дерева
-void DestroyTree(FBTNode* node) {
+// O(N)
+void FullBinaryTree::DestroyTree(FBTNode* node) {
     if (node == nullptr) {
         return;
     }
@@ -15,90 +14,102 @@ void DestroyTree(FBTNode* node) {
     delete node;
 }
 
-void InsertHelper(FBTNode* node, string& key) {
-    // Если у узла отсутствует левый потомок
-    if (node->left == nullptr) {
-        node->left = new FBTNode(key);
-    }
-    // Если у узла отсутствует правый потомок
-    else if (node->right == nullptr) {
-        node->right = new FBTNode(key);
-    }
-    // Рекурсивно идём по левому и правому поддеревьям
-    else if (CountNodes(node->left) <= CountNodes(node->right)) {
-        InsertHelper(node->left, key);
-    } else {
-        InsertHelper(node->right, key);
-    }
-}
-
-// Вставка узла
-void Insert(string key) {
+// O(logN)
+void FullBinaryTree::TINSERT(string key) {
     if (root == nullptr) {
         root = new FBTNode(key);
         return;
     }
-    InsertHelper(root, key);
+    TINSERT_HELPER(root, key);
 }
 
-// Подсчёт узлов в поддереве
-int CountNodes(FBTNode* node) {
-    if (node == nullptr) return 0;
-    return 1 + CountNodes(node->left) + CountNodes(node->right);
+// O(logN)
+void FullBinaryTree::TINSERT_HELPER(FBTNode* node, string& key) {
+    node->nodeCount++; // увеличиваем количество узлов текущего узла
+
+    // выбираем поддерево для вставки
+    if (node->left == nullptr) {
+        node->left = new FBTNode(key);
+    } else if (node->right == nullptr) {
+        node->right = new FBTNode(key);
+    } else if (node->left->nodeCount <= node->right->nodeCount) {
+        TINSERT_HELPER(node->left, key);
+    } else {
+        TINSERT_HELPER(node->right, key);
+    }
 }
 
-// Проверка, является ли дерево Full Binary Tree
-bool IsFullBinaryTree() {
-    return IsFullBinaryTreeHelper(root);
+// O(N)
+bool FullBinaryTree::TFULL() {
+    return TFULL_HELPER(root);
 }
 
-bool IsFullBinaryTreeHelper(FBTNode* node) {
+// O(N)
+bool FullBinaryTree::TFULL_HELPER(FBTNode* node) {
     if (node == nullptr) return true;
-
-    // Если у узла нет потомков, это корректный узел
     if (node->left == nullptr && node->right == nullptr) {
         return true;
     }
-
-    // Если у узла оба потомка присутствуют, проверяем их рекурсивно
     if (node->left != nullptr && node->right != nullptr) {
-        return IsFullBinaryTreeHelper(node->left) &&
-                IsFullBinaryTreeHelper(node->right);
+        return TFULL_HELPER(node->left) && TFULL_HELPER(node->right);
     }
-
-    // Если у узла один потомок, это не Full Binary Tree
     return false;
 }
 
-// Поиск элемента
-FBTNode* Search(string key) {
-    return SearchHelper(root, key);
+// O(N)
+FBTNode* FullBinaryTree::TSEARCH(string key) {
+    return TSEARCH_HELPER(root, key);
 }
 
-FBTNode* SearchHelper(FBTNode* node, const string& key) {
+// O(N)
+FBTNode* FullBinaryTree::TSEARCH_HELPER(FBTNode* node, const string& key) {
     if (node == nullptr) return nullptr;
-
-    // Если ключ совпал, возвращаем узел
     if (node->key == key) return node;
 
-    // Рекурсивный поиск в левом поддереве
-    FBTNode* leftSearch = SearchHelper(node->left, key);
+    FBTNode* leftSearch = TSEARCH_HELPER(node->left, key);
     if (leftSearch != nullptr) return leftSearch;
 
-    // Если в левом поддереве не найдено, ищем в правом
-    return SearchHelper(node->right, key);
+    return TSEARCH_HELPER(node->right, key);
 }
 
-// Отображение дерева (обход в глубину)
-void TREAD() {
+// O(N)
+void FullBinaryTree::TREAD() {
     TREAD_HELPER(root);
     cout << endl;
 }
 
-void TREAD_HELPER(FBTNode* node) {
+// O(N)
+void FullBinaryTree::TREAD_HELPER(FBTNode* node) {
     if (node != nullptr) {
         cout << node->key << " ";
         TREAD_HELPER(node->left);
         TREAD_HELPER(node->right);
     }
+}
+
+// O(N)
+void FullBinaryTree::SaveToFile(FullBinaryTree& tree, const string& filename) {
+    ofstream outFile(filename);
+    if (!outFile.is_open()) {
+        cerr << "Не удалось открыть файл для записи!" << endl;
+        return;
+    }
+    SaveToFileHelper(tree.root, outFile);
+    outFile.close();
+}
+
+// O(N)
+void FullBinaryTree::SaveToFileHelper(FBTNode* node, ofstream& outFile) {
+    if (!node) {
+        outFile << "null ";
+        return;
+    }
+    outFile << node->key << " ";
+    SaveToFileHelper(node->left, outFile);
+    SaveToFileHelper(node->right, outFile);
+}
+
+
+FullBinaryTree::~FullBinaryTree() {
+    DestroyTree(root);
 }

@@ -153,3 +153,7 @@ void DoublyLinkedList::LTWO_read() {
     }
     cout << endl;
 }
+
+DoublyLinkedList::~DoublyLinkedList() {
+    Clear();
+}

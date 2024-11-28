@@ -8,6 +8,8 @@
         "type_traits": "cpp",
         "utility": "cpp",
         "ostream": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "fstream": "cpp",
+        "iosfwd": "cpp"
     }
 }

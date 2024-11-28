@@ -49,3 +49,7 @@ void Queue::QREAD() {
     }
     cout << endl;
 }
+
+Queue::~Queue() {
+    Clear();
+}

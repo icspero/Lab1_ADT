@@ -21,12 +21,6 @@ struct Array {
     int MSIZE();
     void MREAD();
 };
-Array::Array() : size(0), capacity(100) {
-    data = new string[capacity];
-}
-Array::~Array() {
-    delete[] data;  
-}
 
 // Односвязный список
 struct SingleNode {
@@ -49,9 +43,6 @@ struct SinglyLinkedList {
     void LONE_read();
     void Clear();
 };
-SinglyLinkedList::~SinglyLinkedList() {
-    Clear();
-}
 
 // Двусвязный список
 struct DoubleNode {
@@ -74,9 +65,6 @@ struct DoublyLinkedList {
     void LTWO_read();
     void Clear();
 };
-DoublyLinkedList::~DoublyLinkedList() {
-    Clear();
-}
 
 // Очередь
 struct Queue {
@@ -91,9 +79,6 @@ struct Queue {
     void QREAD();
     void Clear();
 };
-Queue::~Queue() {
-    Clear();
-}
 
 // Стек
 struct Stack {
@@ -107,12 +92,7 @@ struct Stack {
     void SPOP();
     void SREAD();
     void Clear();
-    void WriteFromFile(string& cell);
 };
-
-Stack::~Stack() {
-    Clear();
-}
 
 // Хэш-таблица
 struct NodeHash {
@@ -136,39 +116,32 @@ struct HashTable {
     void HDestroyTable(NodeHash* node);
     ~HashTable();
 };
-HashTable::~HashTable() {
-    for (int i = 0; i < size; i++) {
-        HDestroyTable(table[i]);
-    }
-    delete[] table;
-}
 
 // Full Binary Tree
 struct FBTNode {
     string key;
     FBTNode* left;
     FBTNode* right;
+    int nodeCount;
 
-    FBTNode(string key) : key(key), left(nullptr), right(nullptr) {}
+    FBTNode(string key) : key(key), left(nullptr), right(nullptr), nodeCount(1) {}
 };
 struct FullBinaryTree {
     FBTNode* root;
 
     FullBinaryTree() : root(nullptr) {}
 
-    void Insert(string key);
-    void InsertHelper(FBTNode* node, string& key);
-    int CountNodes(FBTNode* node);
-    bool IsFullBinaryTree();
-    bool IsFullBinaryTreeHelper(FBTNode* node);
-    FBTNode* Search(string key);
-    FBTNode* SearchHelper(FBTNode* node, const string& key);
+    void TINSERT(string key);
+    void TINSERT_HELPER(FBTNode* node, string& key);
+    bool TFULL();
+    bool TFULL_HELPER(FBTNode* node);
+    FBTNode* TSEARCH(string key);
+    FBTNode* TSEARCH_HELPER(FBTNode* node, const string& key);
     void TREAD();
     void TREAD_HELPER(FBTNode* node);
+    void SaveToFile(FullBinaryTree& tree, const string& filename);
+    void SaveToFileHelper(FBTNode* node, ofstream& outFile);
 
     void DestroyTree(FBTNode* node);
     ~FullBinaryTree();
 };
-FullBinaryTree::~FullBinaryTree() {
-    DestroyTree(root);
-}
