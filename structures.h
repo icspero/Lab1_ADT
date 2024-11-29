@@ -118,30 +118,44 @@ struct HashTable {
 };
 
 // Full Binary Tree
-struct FBTNode {
+struct FBTnode {
+
     string key;
-    FBTNode* left;
-    FBTNode* right;
-    int nodeCount;
+    FBTnode* left;
+    FBTnode* right;
+    int height;
 
-    FBTNode(string key) : key(key), left(nullptr), right(nullptr), nodeCount(1) {}
+    FBTnode(string key) : key(key), left(nullptr), right(nullptr), height(1) {}
+
 };
-struct FullBinaryTree {
-    FBTNode* root;
+struct FBT {
+    FBTnode* root;
+    FBT() : root(nullptr) {};
 
-    FullBinaryTree() : root(nullptr) {}
+    ~FBT();
+    void TDestroyFBT(FBTnode* node);
+    string key;
+    unsigned char height;
+    SingleNode* left;
+    SingleNode* right;
 
-    void TINSERT(string key);
-    void TINSERT_HELPER(FBTNode* node, string& key);
+    int THeight(FBTnode* node);
+    int TBalance(FBTnode* node);
+    FBTnode* TRightRotate(FBTnode* y);
+    FBTnode* TLeftRotate(FBTnode* x);
+    FBTnode* TInsert(FBTnode* node, string & key);
+    FBTnode* TMinValueLeftNode(FBTnode* node);
+    bool IsFullBinaryTree(FBTnode* node);
+    FBTnode* TSearch(FBTnode* node, string& key);
+    void TDisplay(FBTnode* node);
+    void TPUSH(string& key);
     bool TFULL();
-    bool TFULL_HELPER(FBTNode* node);
-    FBTNode* TSEARCH(string key);
-    FBTNode* TSEARCH_HELPER(FBTNode* node, const string& key);
+    bool TSEARCH(string& key);
     void TREAD();
-    void TREAD_HELPER(FBTNode* node);
-    void SaveToFile(FullBinaryTree& tree, const string& filename);
-    void SaveToFileHelper(FBTNode* node, ofstream& outFile);
 
-    void DestroyTree(FBTNode* node);
-    ~FullBinaryTree();
+    void TSaveToFile(FBTnode* node, ofstream& FileWrite);
+    void TLoadFromFile(const string& filename);
+    void TSaveToFileHelper(const string& filename);
+    
 };
+

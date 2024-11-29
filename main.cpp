@@ -3,228 +3,9 @@
 #include <sstream>
 #include <cstring>
 #include "structures.h"
+#include "RecordingFunctions.h"
 
 using namespace std;
-
-// ---------- Запись в структуру ----------
-void WritingFromFileToArray(Array& array, const string& filename) {
-    ifstream inFile(filename);
-    if (!inFile.is_open()) {
-        cerr << "Ошибка открытия файла " << filename << endl;
-        return;
-    }
-
-    string value;
-    while (getline(inFile, value)) {
-        array.MPUSH_end(value);
-    }
-
-    inFile.close();
-}
-
-void WritingFromFileToSinglyLinkedList(SinglyLinkedList& list, const string& filename) {
-    ifstream inFile(filename);
-    if (!inFile.is_open()) {
-        cerr << "Ошибка открытия файла  " << filename << endl;
-        return;
-    }
-
-    string value;
-    while (getline(inFile, value)) {
-        list.LONEPUSH_tail(value);
-    }
-
-    inFile.close();
-}
-
-void WritingFromFileToDoublyLinkedList(DoublyLinkedList& list, const string& filename) {
-    ifstream inFile(filename);
-    if (!inFile.is_open()) {
-        cerr << "Ошибка открытия файла  " << filename << endl;
-        return;
-    }
-
-    string value;
-    while (getline(inFile, value)) {
-        list.LTWOPUSH_tail(value);
-    }
-
-    inFile.close();
-}
-
-void WritingFromFileToQueue(Queue& queue, const string& filename) {
-    ifstream inFile(filename);
-    if (!inFile.is_open()) {
-        cerr << "Ошибка открытия файла  " << filename << endl;
-        return;
-    }
-
-    string value;
-    while (getline(inFile, value)) {
-        queue.QPUSH(value);
-    }
-
-    inFile.close();
-}
-
-void WritingFromFileToStack(Stack& stack, const string& filename) {
-    ifstream inFile(filename);
-    if (!inFile.is_open()) {
-        cerr << "Ошибка открытия файла  " << filename << endl;
-        return;
-    }
-
-    string value;
-    while (getline(inFile, value)) {
-        stack.SPUSH(value);
-    }
-
-    inFile.close();
-}
-
-void WritingFromFileToHashTable(HashTable& hashTable, const string& filename) {
-    ifstream inFile(filename);
-    if (!inFile.is_open()) {
-        cerr << "Ошибка открытия файла  " << filename << endl;
-        return;
-    }
-
-    string line;
-    while (getline(inFile, line)) {
-        size_t delimPos = line.find('=');
-        if (delimPos != string::npos) {
-            string key = line.substr(0, delimPos);
-            string value = line.substr(delimPos + 1);
-            hashTable.HPUSH(key, value);
-        }
-    }
-
-    inFile.close();
-}
-
-void WritingFromFileToFullBinaryTree(FullBinaryTree& tree, const string& filename) {
-    ifstream inFile(filename);
-    if (!inFile.is_open()) {
-        cerr << "Ошибка открытия файла  " << filename << endl;
-        return;
-    }
-
-    string key;
-    while (getline(inFile, key)) {
-        tree.TINSERT(key);
-    }
-
-    inFile.close();
-}
-
-// ---------- Запись в файл ----------
-void WritingFromArrayToFile(Array& array, const string& filename) {
-    ofstream outFile(filename);
-    if (!outFile.is_open()) {
-        cerr << "Ошибка открытия файла  " << filename << endl;
-        return;
-    }
-
-    for (int i = 0; i < array.size; ++i) {
-        outFile << array.MGET(i) << endl;
-    }
-
-    outFile.close();
-}
-
-void WritingFromSinglyLinkedListToFile(SinglyLinkedList& list, const string& filename) {
-    ofstream outFile(filename);
-    if (!outFile.is_open()) {
-        cerr << "Ошибка открытия файла " << filename << endl;
-        return;
-    }
-
-    SingleNode* current = list.head;
-    while (current != nullptr) {
-        outFile << current->cell << endl;
-        current = current->next;
-    }
-
-    outFile.close();
-}
-
-void WritingFromDoublyLinkedListToFile(DoublyLinkedList& list, const string& filename) {
-    ofstream outFile(filename);
-    if (!outFile.is_open()) {
-        cerr << "Ошибка открытия файла " << filename << endl;
-        return;
-    }
-
-    DoubleNode* current = list.head;
-    while (current != nullptr) {
-        outFile << current->cell << endl;
-        current = current->next;
-    }
-
-    outFile.close();
-}
-
-void WritingFromQueueToFile(Queue& queue, const string& filename) {
-    ofstream outFile(filename);
-    if (!outFile.is_open()) {
-        cerr << "Ошибка открытия файла " << filename << endl;
-        return;
-    }
-
-    SingleNode* current = queue.head;
-    while (current != nullptr) {
-        outFile << current->cell << endl;
-        current = current->next;
-    }
-
-    outFile.close();
-}
-
-void WritingFromStackToFile(Stack& stack, const string& filename) {
-    ofstream outFile(filename);
-    if (!outFile.is_open()) {
-        cerr << "Ошибка открытия файла " << filename << endl;
-        return;
-    }
-
-    SingleNode* current = stack.head;
-    while (current != nullptr) {
-        outFile << current->cell << endl;
-        current = current->next;
-    }
-
-    outFile.close();
-}
-
-void WritingFromHashTableToFile(HashTable& hashTable, const string& filename) {
-    ofstream outFile(filename);
-    if (!outFile.is_open()) {
-        cerr << "Ошибка открытия файла " << filename << endl;
-        return;
-    }
-
-    for (int i = 0; i < hashTable.size; ++i) {
-        NodeHash* current = hashTable.table[i];
-        while (current != nullptr) {
-            outFile << current->key << "=" << current->value << endl;
-            current = current->next;
-        }
-    }
-
-    outFile.close();
-}
-
-void WritingFromFullBinaryTreeToFile(FullBinaryTree& tree, const string& filename) {
-    ofstream outFile(filename);
-    if (!outFile.is_open()) {
-        cerr << "Ошибка открытия файла " << filename << endl;
-        return;
-    }
-
-    tree.SaveToFile(tree, filename);
-
-    outFile.close();
-}
 
 // Функция обработки аргументов командной строки
 void inputArguments(int argc, char* argv[], string& filename, string& query) {
@@ -268,7 +49,7 @@ int main(int argc, char* argv[]) {
     SinglyLinkedList singlyList;
     DoublyLinkedList doublyList;
     HashTable hashTable;
-    FullBinaryTree tree;
+    FBT tree;
 
     int index;
     string commandWord, element, indexStr;
@@ -279,8 +60,8 @@ int main(int argc, char* argv[]) {
     ss >> indexStr;
 
     indexStr.erase(0, indexStr.find_first_not_of(" \t"));
-    cout << "Command: '" << commandWord << "', Element: '" << element << "', IndexStr: '" << indexStr << "'" << endl;
-    
+    //cout << "Command: '" << commandWord << "', Element: '" << element << "', IndexStr: '" << indexStr << "'" << endl;
+
     try {
         if (commandWord.at(0) == 'M'){
             WritingFromFileToArray(array, filenameConsole);
@@ -316,9 +97,11 @@ int main(int argc, char* argv[]) {
             WritingFromFileToQueue(queue, filenameConsole);
             if (commandWord == "QPUSH") {
                 queue.QPUSH(element);
+                cout << "Элемент добавлен!" << endl;
             }
             else if(commandWord == "QPOP"){
                 queue.QPOP();
+                cout << "Элемент удалён!" << endl;
             }
             else if(commandWord == "QREAD"){
                 queue.QREAD();
@@ -402,9 +185,10 @@ int main(int argc, char* argv[]) {
             }
             WritingFromHashTableToFile(hashTable, filenameConsole);
         } else if (commandWord.at(0) == 'T'){
-            WritingFromFileToFullBinaryTree(tree, filenameConsole);
-            if (commandWord == "TINSERT") {
-                tree.TINSERT(element);
+            tree.TLoadFromFile(filenameConsole);
+            if (commandWord == "TPUSH") {
+                tree.TPUSH(element);
+                cout << "Элемент успешно добавлен!" << endl;
             }
             if (commandWord == "TFULL") {
                 bool test = tree.TFULL();
@@ -415,12 +199,17 @@ int main(int argc, char* argv[]) {
                 }
             }
             if (commandWord == "TSEARCH") {
-                tree.TSEARCH(element);
+                bool test = tree.TSEARCH(element);
+                if (test){
+                    cout << "Элемент найден!" << endl;
+                } else {
+                    cout << "Элемент не найден!" << endl;
+                }
             }
             if (commandWord == "TREAD") {
                 tree.TREAD();
             }
-            WritingFromFullBinaryTreeToFile(tree, filenameConsole);
+            tree.TSaveToFileHelper(filenameConsole);
         } else {
             cout << "Неизвестная команда: " << commandWord << endl;
         }
