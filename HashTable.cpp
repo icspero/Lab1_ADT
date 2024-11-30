@@ -67,11 +67,13 @@ void HashTable::HDEL(string& key) {
             }
             delete current;  
             count--;  
+            cout << "Элемент успешно удален!" << endl;
             return;  
         }
         prev = current;  // переход к следующему узлу
         current = current->next;
     }
+    cout << "Такого элемента нет!" << endl;
 }
 
 // O(1) - O(N)
@@ -86,7 +88,7 @@ string HashTable::HGET(string& key) {
         current = current->next; 
     }
 
-    return "\n\nКлюч не был найден!\n\n";  
+    return "Ключ не был найден!";  
 }
 
 // O(N)

@@ -175,10 +175,15 @@ int main(int argc, char* argv[]) {
                 hashTable.HPUSH(key, value);
             }
             if (commandWord == "HDEL") {
-                hashTable.HDEL(key);
+                hashTable.HDEL(value);
             }
             if (commandWord == "HGET") {
-                hashTable.HGET(key);
+                string val = hashTable.HGET(value);
+                if (val != "Ключ не был найден!"){
+                    cout << "Ключ найден! Его значение: " << val << endl; 
+                } else {
+                    cout << val << endl;
+                }
             }
             if (commandWord == "HREAD") {
                 hashTable.HREAD();
@@ -186,7 +191,7 @@ int main(int argc, char* argv[]) {
             WritingFromHashTableToFile(hashTable, filenameConsole);
         } else if (commandWord.at(0) == 'T'){
             tree.TLoadFromFile(filenameConsole);
-            if (commandWord == "TPUSH") {
+            if (commandWord == "TINSERT") {
                 tree.TPUSH(element);
                 cout << "Элемент успешно добавлен!" << endl;
             }

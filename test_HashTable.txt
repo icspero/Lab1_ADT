@@ -1,0 +1,8 @@
+ind10=dc
+ind1=element
+ind2=element
+ind3=element
+ind4=element
+ind5=element
+ind6=element
+ind7=element2
