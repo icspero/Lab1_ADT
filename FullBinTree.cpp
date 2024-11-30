@@ -13,94 +13,32 @@ void FBT::TDestroyFBT(FBTnode* node) {
     delete node;
 }
 
-int FBT::THeight(FBTnode* node) {
-    if (node == nullptr) {
-        return 0;
-    }
-    return node->height; 
-}
-
-int FBT::TBalance(FBTnode* node) {
-    if (node == nullptr) return 0; 
-    return THeight(node->left) - THeight(node->right); 
-}
-
-FBTnode* FBT::TRightRotate(FBTnode* node) {
-    FBTnode* A = node->left; // левый потомок узла становится А
-    FBTnode* B = A->right;  // правый потомок узла А становится В
-
-    A->right = node; // А становится корнем, ноде становится правым потомком
-    node->left = B; // левый потомок ноде становится В
-
-    node->height = max(THeight(node->left), THeight(node->right)) + 1; // ноде и А становятся двумя разными поддеревьями
-    A->height = max(THeight(A->left), THeight(A->right)) + 1;
-
-    return A; // корень
-}
-
-FBTnode* FBT::TLeftRotate(FBTnode* node) { // симметрия
-    FBTnode* A = node->right;
-    FBTnode* B = A->left;
-
-    A->left = node;
-    node->right = B;
-
-    node->height = max(THeight(node->left), THeight(node->right)) + 1;
-    A->height = max(THeight(A->left), THeight(A->right)) + 1;
-
-    return A;
-}
-
-FBTnode* FBT::TInsert(FBTnode* node,  string&key) {
-    // если текущий узел пустой, создаем новый узел с переданным ключом
+FBTnode* FBT::TInsert(FBTnode* node, string& key) {
+    // Если текущий узел пустой, создаем новый узел и возвращаем его
     if (node == nullptr) {
         return new FBTnode(key);
     }
-    //рекурсивно вставляем в левое поддерево
-    if (key < node->key) {
+
+    // Если у узла есть только один потомок, добавляем в недостающий
+    if (node->left == nullptr) {
         node->left = TInsert(node->left, key);
-    }
-    // рекурсивно вставляем в правое поддерево
-    else if (key > node->key) {
+    } else if (node->right == nullptr) {
         node->right = TInsert(node->right, key);
-    }
-    // если ключ уже существует, возвращаем текущий узел 
+    } 
+    // Если оба потомка существуют, рекурсивно переходим в левое поддерево,
+    // затем в правое поддерево
     else {
-        return node; //(без дубликатов)
+        // Определяем, куда двигаться: в левое или правое поддерево
+        // Для FBT идем влево, пока все уровни слева не заполнены
+        if (IsFullBinaryTree(node->left)) {
+            node->right = TInsert(node->right, key);
+        } else {
+            node->left = TInsert(node->left, key);
+        }
     }
 
-    node->height = 1 + max(THeight(node->left), THeight(node->right)); // обновляем высоту текущего узла
-
-    // вычисляем баланс текущего узла
-    int balance = TBalance(node);
-
-    // левый-левый
-    if (balance > 1 && key < node->left->key)
-        return TRightRotate(node);
-
-    // левый-правый
-    if (balance > 1 && key > node->left->key) {
-        node->left = TLeftRotate(node->left); //меняет местами
-        return TRightRotate(node);
-    }
-    // правый-правый
-    if (balance < -1 && key > node->right->key)
-        return TLeftRotate(node);
-
-    // правый-левый
-    if (balance < -1 && key < node->right->key) {
-        node->right = TRightRotate(node->right); // меняет местами
-        return TLeftRotate(node);
-    }
-
-    return node; // возвращаем корень поддерева
-}
-
-FBTnode* FBT::TMinValueLeftNode(FBTnode* node) {
-    FBTnode* current = node;
-    while (current->left != nullptr) // идем по левому поддереву до самого левого узла
-        current = current->left;
-    return current;
+    // Возвращаем текущий узел
+    return node;
 }
 
 bool FBT::IsFullBinaryTree(FBTnode* node) {

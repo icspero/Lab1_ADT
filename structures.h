@@ -139,12 +139,7 @@ struct FBT {
     SingleNode* left;
     SingleNode* right;
 
-    int THeight(FBTnode* node);
-    int TBalance(FBTnode* node);
-    FBTnode* TRightRotate(FBTnode* y);
-    FBTnode* TLeftRotate(FBTnode* x);
     FBTnode* TInsert(FBTnode* node, string & key);
-    FBTnode* TMinValueLeftNode(FBTnode* node);
     bool IsFullBinaryTree(FBTnode* node);
     FBTnode* TSearch(FBTnode* node, string& key);
     void TDisplay(FBTnode* node);
